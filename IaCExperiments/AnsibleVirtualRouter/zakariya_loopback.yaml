@@ -1,0 +1,37 @@
+---
+# Playbook to create a loopback interface with IPv4 and IPv6 addresses
+
+- name: CREATE LOOPBACK INTERFACE WITH MULTIPLE ADDRESSES
+  hosts: CSR1kv  # Target hosts
+  gather_facts: False
+  connection: local
+  become: yes
+  become_method: enable
+
+  tasks:
+    # Task to create the loopback interface
+    - name: Create Loopback Interface
+      ios_interface:
+        name: Loopback200
+        enabled: True
+        description: Loopback interface 200 with IPv4 and IPv6 addresses
+
+    # Task to assign an IPv4 address to the loopback interface
+    - name: Assign IPv4 Address to Loopback
+      ios_l3_interface:
+        name: Loopback200
+        ipv4: 192.168.1.200/32
+
+    # Task to assign the first IPv6 address to the loopback interface
+    - name: Assign First IPv6 Address to Loopback
+      ios_l3_interface:
+        name: Loopback200
+        ipv6:
+          - address: 2001:db8:1::200/128
+
+    # Task to assign the second IPv6 address to the loopback interface
+    - name: Assign Second IPv6 Address to Loopback
+      ios_l3_interface:
+        name: Loopback200
+        ipv6:
+          - address: 2001:db8:2::200/128
